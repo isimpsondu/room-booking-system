@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Tab, makeStyles } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import { Room } from "./Room";
 
 interface RoomListProps {
   rooms: Array<any>;
@@ -50,10 +51,12 @@ export const RoomList = ({ rooms }: RoomListProps) => {
             );
           })}
         </TabList>
-        {rooms.map((_, index) => {
+        {rooms.map((value, index) => {
           return (
             <TabPanel value={index.toString()} key={index}>
-              <div className={classes.tabContent}></div>
+              <div className={classes.tabContent}>
+                <Room reservations={value.reservations} />
+              </div>
             </TabPanel>
           );
         })}
