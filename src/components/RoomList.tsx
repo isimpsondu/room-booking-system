@@ -55,7 +55,7 @@ export const RoomList = ({ rooms }: RoomListProps) => {
           return (
             <TabPanel value={index.toString()} key={index}>
               <div className={classes.tabContent}>
-                <Room reservations={value.reservations} />
+                <Room roomIdx={index} reservations={value.reservations} />
               </div>
             </TabPanel>
           );
