@@ -80,7 +80,7 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter how many hours you want to reserve.
+            Please enter how many hours you want to reserve
           </DialogContentText>
           <form className={classes.root} autoComplete="off">
             <TextField

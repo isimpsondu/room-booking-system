@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { constants } from "ethers";
+import { useEthers } from "@usedapp/core"
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import Reserve from "./Reserve";
+import Cancel from "./Cancel";
 
 interface RoomProps {
   roomIdx: number;
@@ -21,6 +23,7 @@ const columns: GridColDef[] = [
 
 export const Room = ({ roomIdx, reservations }: RoomProps) => {
   const [openReserveDialog, setOpenReserveDialog] = useState(false);
+  const [openCancelDialog, setOpenCancelDialog] = useState(false);
   const defaultRow: Row = {
     roomIdx, id: 0, owner: ""
   };
@@ -33,11 +36,18 @@ export const Room = ({ roomIdx, reservations }: RoomProps) => {
     };
     return row;
   });
+  const { account } = useEthers()
   const onRowClick = (param: GridRowParams) => {
-    setSelectedRow(param.row);
-    setOpenReserveDialog(true);
+    const row = param.row;
+    setSelectedRow(row);
+    if (row.owner === null) {
+      setOpenReserveDialog(true);
+    } else if (row.owner == account) {
+      setOpenCancelDialog(true);
+    }
   };
   const handleReserveDialogClose = () => setOpenReserveDialog(false);
+  const handleCancelDialogClose = () => setOpenCancelDialog(false);
   return (
     <div style={{ height: 640, width: "100%" }}>
       <DataGrid
@@ -49,6 +59,11 @@ export const Room = ({ roomIdx, reservations }: RoomProps) => {
       <Reserve
         open={openReserveDialog}
         handleClose={handleReserveDialogClose}
+        data={selectedRow}
+      />
+      <Cancel
+        open={openCancelDialog}
+        handleClose={handleCancelDialogClose}
         data={selectedRow}
       />
     </div>
