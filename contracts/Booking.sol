@@ -26,8 +26,8 @@ contract Booking {
       if (timeslotIdx + countInHour > MAX_TIMESLOTS) {
         return false;
       }
-      for (uint8 i = timeslotIdx; i < countInHour; i++) {
-        if (rooms[roomIdx].reservations[i] != address(0)) {
+      for (uint8 i = 0; i < countInHour; i++) {
+        if (rooms[roomIdx].reservations[timeslotIdx + i] != address(0)) {
           return false;
         }
       }
@@ -97,10 +97,10 @@ contract Booking {
       return (startTimeslotIdx, countInHour);
   }
 
-  function updateUser(uint8 roomIdx, uint8 timeslotIdx, uint8 count, 
+  function updateUser(uint8 roomIdx, uint8 timeslotIdx, uint8 countInHour, 
     BookingState bookingState) 
     private {
-      for (uint8 i = 0; i < count; i++) {
+      for (uint8 i = 0; i < countInHour; i++) {
         users[msg.sender][roomIdx][timeslotIdx + i] = bookingState;
       }
       emit UserUpdated(msg.sender, roomIdx, timeslotIdx, 
