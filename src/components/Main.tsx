@@ -17,7 +17,7 @@ export const Main = () => {
 
   return (
     <>
-      <h2 className={classes.title}>Room Booking App</h2>
+      <h2 className={classes.title}>Room Booking DApp (Rinkeby Network)</h2>
       <RoomList rooms={rooms} />
     </>
   );
