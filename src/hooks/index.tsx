@@ -4,7 +4,7 @@ import { useContractCall, useContractFunction } from "@usedapp/core";
 import Booking from "../artifacts/contracts/Booking.sol/Booking.json";
 declare var window: any;
 
-const bookingContractAddress = "0x330A9Dd3422a49524a5709c298076E80736254E1";
+const bookingContractAddress = "0xe26032E425c9e4C8E2D86a5154336de6d3605530";
 const bookingContractInterface = new ethers.utils.Interface(Booking.abi);
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
