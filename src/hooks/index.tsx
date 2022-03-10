@@ -27,11 +27,15 @@ export function useRooms() {
 }
 
 export function useReserve() {
-  const { state, send } = useContractFunction(contract, "reserve", {});
+  const { state, send } = useContractFunction(contract, "reserve", {
+    transactionName: "Reserve room booking",
+  });
   return { state, send };
 }
 
 export function useCancel() {
-  const { state, send } = useContractFunction(contract, "cancel", {});
+  const { state, send } = useContractFunction(contract, "cancel", {
+    transactionName: "Cancel room booking",
+  });
   return { state, send };
 }
