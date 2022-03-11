@@ -45,14 +45,27 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
 
   const { send, state: reserveRoomState } = useReserve();
 
+  const [showReserveRoomFailed, setShowReserveRoomFailed] = useState(false);
   const onClickConfirm = () => {
-    send(data.roomIdx, data.id, hour);
+    send(data.roomIdx, data.id, hour).then(() => {
+      if (reserveRoomState.transaction === undefined) {
+        setTimeout(() => {
+          if (
+            reserveRoomState.errorMessage &&
+            reserveRoomState.errorMessage.trim().length > 0
+          ) {
+            setShowReserveRoomFailed(true);
+          }
+        }, 3000);
+      }
+    });
   };
 
   const isMining = reserveRoomState.status === "Mining";
   const [showReserveRoomSuccess, setShowReserveRoomSuccess] = useState(false);
   const handleCloseSnack = () => {
     setShowReserveRoomSuccess(false);
+    setShowReserveRoomFailed(false);
   };
 
   useEffect(() => {
@@ -96,7 +109,7 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
               label="Hours"
               type="number"
               variant="outlined"
-              defaultValue={1}
+              defaultValue={hour}
               onChange={handleHourInputChange}
             />
           </form>
@@ -109,11 +122,20 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
       </Dialog>
       <Snackbar
         open={showReserveRoomSuccess}
-        autoHideDuration={5000}
+        autoHideDuration={3000}
         onClose={handleCloseSnack}
       >
         <Alert onClose={handleCloseSnack} severity="success">
           You have successfully booked the room
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={showReserveRoomFailed}
+        autoHideDuration={3000}
+        onClose={handleCloseSnack}
+      >
+        <Alert onClose={handleCloseSnack} severity="error">
+          {reserveRoomState.errorMessage}
         </Alert>
       </Snackbar>
     </>
