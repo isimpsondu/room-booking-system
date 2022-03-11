@@ -22,7 +22,6 @@ export function useRooms() {
       method: "listRooms",
       args: [],
     }) ?? [];
-  console.log(rooms);
   return rooms[0];
 }
 

@@ -25,14 +25,27 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
 
   const { send, state: cancelRoomState } = useCancel();
 
+  const [showCancelRoomFailed, setShowCancelRoomFailed] = useState(false);
   const onClickConfirm = () => {
-    send(data.roomIdx, data.id);
+    send(data.roomIdx, data.id).then(() => {
+      if (cancelRoomState.transaction === undefined) {
+        setTimeout(() => {
+          if (
+            cancelRoomState.errorMessage &&
+            cancelRoomState.errorMessage.trim().length > 0
+          ) {
+            setShowCancelRoomFailed(true);
+          }
+        }, 3000);
+      }
+    });
   };
 
   const isMining = cancelRoomState.status === "Mining";
   const [showCancelRoomSuccess, setShowCancelRoomSuccess] = useState(false);
   const handleCloseSnack = () => {
     setShowCancelRoomSuccess(false);
+    setShowCancelRoomFailed(false);
   };
 
   useEffect(() => {
@@ -69,11 +82,20 @@ export default function Reserve({ open, handleClose, data }: ReserveProps) {
       </Dialog>
       <Snackbar
         open={showCancelRoomSuccess}
-        autoHideDuration={5000}
+        autoHideDuration={3000}
         onClose={handleCloseSnack}
       >
         <Alert onClose={handleCloseSnack} severity="success">
           You have successfully cancelled your booking
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={showCancelRoomFailed}
+        autoHideDuration={3000}
+        onClose={handleCloseSnack}
+      >
+        <Alert onClose={handleCloseSnack} severity="error">
+          {cancelRoomState.errorMessage}
         </Alert>
       </Snackbar>
     </>
